@@ -19,15 +19,19 @@
  * Authored by: Tudor Plugaru <plugaru.tudor@gmail.com>
  */
 
-public class Caffeine.Widgets.DisplayWidget : Gtk.Grid {
-    private Gtk.Image icon;
+public class Caffeine.Widgets.PopoverWidget : Gtk.Grid {
+    private Caffeine.Indicator indicator;
+
+    public PopoverWidget (Caffeine.Indicator _indicator) {
+        Object (orientation: Gtk.Orientation.VERTICAL);
+        indicator = _indicator;
+    }
 
     construct {
-        column_spacing = 4;
-        margin_top = 4;
-
-        icon = new Gtk.Image.from_icon_name ("distributor-logo-symbolic", Gtk.IconSize.MENU);
-        add (icon);
+        var quit_button = new Gtk.ModelButton ();
+        quit_button.text = _ ("Quit");
+        quit_button.get_style_context ().add_class ("menuitem");
+        quit_button.get_style_context ().remove_class ("button");
+        add (quit_button);
     }
 }
-

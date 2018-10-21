@@ -19,10 +19,10 @@
  * Authored by: Tudor Plugaru <plugaru.tudor@gmail.com>
  */
 
-public class SysMonitor.Indicator : Wingpanel.Indicator {
+public class Caffeine.Indicator : Wingpanel.Indicator {
     const string APPNAME = "wingpanel-caffeine";
 
-    private SysMonitor.Widgets.DisplayWidget display_widget;
+    private Caffeine.Widgets.DisplayWidget display_widget;
 
 
     public Indicator (Wingpanel.IndicatorManager.ServerType server_type) {
@@ -31,14 +31,12 @@ public class SysMonitor.Indicator : Wingpanel.Indicator {
             display_name: _ ("Wingpanel Caffeine"),
             description: _ ("Caffeine for elementary")
             );
-
-
+        visible = true;
     }
 
     public override Gtk.Widget get_display_widget () {
         if (display_widget == null) {
-            display_widget = new SysMonitor.Widgets.DisplayWidget ();
-            update ();
+            display_widget = new Caffeine.Widgets.DisplayWidget ();
         }
         return display_widget;
     }
@@ -60,7 +58,7 @@ public Wingpanel.Indicator ? get_indicator (Module module, Wingpanel.IndicatorMa
         return null;
     }
 
-    var indicator = new SysMonitor.Indicator (server_type);
+    var indicator = new Caffeine.Indicator (server_type);
 
     return indicator;
 }
