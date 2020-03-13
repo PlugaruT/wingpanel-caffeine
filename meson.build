@@ -4,17 +4,27 @@ gettext_name = meson.project_name() + '-indicator'
 gnome = import('gnome')
 i18n = import('i18n')
 
+# common dirs
+prefix = get_option('prefix')
+datadir = join_paths(prefix, get_option('datadir'))
+libdir = join_paths(prefix, get_option('libdir'))
+
 # add_project_arguments(['--vapidir', join_paths(meson.current_source_dir(), 'vapi')], language: 'vala')
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format(gettext_name), language:'c')
 
 wingpanel_dep = dependency('wingpanel-2.0')
 
+icons_gresource = gnome.compile_resources(
+    'gresource_icons',
+    'data/icons.indicator.gresource.xml',
+    source_dir: 'data/',
+    c_name: 'as'
+)
+
 shared_module(
-    meson.project_name(),
+    'wingpanel-caffeine',
     'src/Indicator.vala',
-    'src/Widgets/DisplayWidget.vala',
-    'src/Widgets/PopoverWidget.vala',
-    name_prefix: '',
+    icons_gresource,
     dependencies: [
         dependency('glib-2.0'),
         dependency('gobject-2.0'),
@@ -26,14 +36,9 @@ shared_module(
             '--vapidir=' + meson.source_root() + '/vapi/',
           ],
     install: true,
-    install_dir : wingpanel_dep.get_pkgconfig_variable('indicatorsdir')
+    install_dir : wingpanel_dep.get_pkgconfig_variable('indicatorsdir', define_variable: ['libdir', libdir]),
 )
 
-# install_data(
-#     'schemas/com.github.plugarut.wingpanel-indicator-sys-monitor.gschema.xml',
-#     install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
-# )
+subdir('data')
 
-# subdir('po')
-
-# meson.add_install_script('meson/post_install.py')
+meson.add_install_script('post_install.py')
